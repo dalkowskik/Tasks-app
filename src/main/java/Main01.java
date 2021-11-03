@@ -7,10 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 
@@ -23,7 +20,7 @@ public class Main01 {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.next();
 
-        while(!input.equals("quit")){
+        while (!input.equals("quit")) {
             switch (input) {
                 case "add":
                     addTask();
@@ -38,7 +35,8 @@ public class Main01 {
             }
             input = scanner.nextLine();
         }
-
+        System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT+"Goodbye!");
+        System.out.println("Kamil Dalkowski"+ConsoleColors.RESET);
 
 
     }
@@ -46,15 +44,41 @@ public class Main01 {
     private static void remove() {
         System.out.println("Which task do you want delete?");
         Scanner scanner = new Scanner(System.in);
+        List<String> list = new ArrayList<>();
+        try {
+            int index = scanner.nextInt();
+            Path path = Paths.get("tasks.txt");
+            try {
+                for (String line : Files.readAllLines(path)) {
+                    list.add(line);
+                }
+                list.remove(index);
+
+                Path path1 = Paths.get("tasks.txt");
+                try {
+                    Files.write(path1, list);
+                } catch (IOException ex) {
+                    System.out.println("Nie można zapisać pliku.");
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } catch (InputMismatchException e) {
+            System.out.println("Write index number. Try again");
+        }
 
 
+        options();
 
 
     }
 
 
-    private static void options(){
-        System.out.println("\n"+"Select an option:"+"\n"+"add"+"\n"+"list"+"\n"+"remove"+"\n"+"quit"+"\n");
+    private static void options() {
+        System.out.println(ConsoleColors.BLUE_BOLD+"Select an option: "+ConsoleColors.RESET);
+        System.out.println("add" + "\n" + "list" + "\n" + "remove" + "\n" + "quit" + "\n");
     }
 
     private static void showList() {
